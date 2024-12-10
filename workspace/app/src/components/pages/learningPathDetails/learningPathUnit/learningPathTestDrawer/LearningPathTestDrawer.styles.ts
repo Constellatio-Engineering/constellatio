@@ -34,9 +34,7 @@ export const drawerStyles = () =>
 
 export const contentWrapper = css`
   width: 100%;
-  max-width: 720px;
-  padding: 50px 36px;
-  padding-bottom: 0;
+  padding: 50px 32px 0;
   display: flex;
   justify-content: center;
   margin: 0 auto;
@@ -48,4 +46,20 @@ export const richTextWrapper = css`
 
 export const gameWrapper = css`
   margin: 36px 0;
+`;
+
+export const wrapper = css`
+  background-color: #EEF8F2;
+  border: 1px solid #008D39;
+  margin-bottom: 60px;
+  color: #008D39;
+  padding: 24px;
+  border-radius: 12px;
+  h1 {
+    font-size: 32px;
+  }
+`;
+
+export const buttonWrapper = css`
+  margin-top: 20px;
 `;

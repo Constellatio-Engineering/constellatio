@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 
 export const wrapper = () => css`
   background-color: ${colooors["neutrals-01"][0]};
-  padding: 60px 32px 48px 32px;
+  padding: 48px 32px 36px 36px;
   border-radius: 12px;
   border-top: 12px solid #F0B3B2;
   border-color: #eed4d4;

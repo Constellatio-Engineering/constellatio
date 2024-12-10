@@ -671,24 +671,6 @@ type CardSelectionGame_ConnectionEdge {
 }
 
 """"""
-input CardSelectionGame_Nested_Where {
-  """"""
-  AND: [CardSelectionGame_Nested_Where]
-
-  """"""
-  OR: [CardSelectionGame_Nested_Where]
-
-  """"""
-  helpNote: CaisyField_Richtext_Where
-
-  """"""
-  question: CaisyField_String_Where
-
-  """"""
-  questionType: CardSelectionGame_QuestionType_Where
-}
-
-""""""
 enum CardSelectionGame_QuestionType {
   """"""
   multi_punch_question
@@ -1130,21 +1112,6 @@ type DragNDropGame_ConnectionEdge {
 }
 
 """"""
-input DragNDropGame_Nested_Where {
-  """"""
-  AND: [DragNDropGame_Nested_Where]
-
-  """"""
-  OR: [DragNDropGame_Nested_Where]
-
-  """"""
-  helpNote: CaisyField_Richtext_Where
-
-  """"""
-  question: CaisyField_String_Where
-}
-
-""""""
 input DragNDropGame_Sort {
   """"""
   createdAt: Order
@@ -1306,24 +1273,6 @@ input FillInGapsGame_MainCategory_WhereConnection {
 }
 
 """"""
-input FillInGapsGame_Nested_Where {
-  """"""
-  AND: [FillInGapsGame_Nested_Where]
-
-  """"""
-  OR: [FillInGapsGame_Nested_Where]
-
-  """"""
-  fillGameParagraph: CaisyField_Richtext_Where
-
-  """"""
-  helpNote: CaisyField_Richtext_Where
-
-  """"""
-  question: CaisyField_String_Where
-}
-
-""""""
 input FillInGapsGame_Sort {
   """"""
   createdAt: Order
@@ -1479,7 +1428,7 @@ type LearningPathUnit {
   _meta: CaisyDocument_Meta
 
   """"""
-  caseLearningTest(
+  caseLearningTests(
     """
     The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
     """
@@ -1490,7 +1439,7 @@ type LearningPathUnit {
 
     """"""
     locale: String
-  ): [LearningPathUnit_caseLearningTest]
+  ): [LearningPathUnit_caseLearningTests]
 
   """"""
   contentPieces(
@@ -1513,31 +1462,17 @@ type LearningPathUnit {
   ignoreOrder: Boolean
 
   """"""
-  learningTests(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [LearningPathUnit_learningTests]
-
-  """"""
   title: String
 }
 
 """"""
-input LearningPathUnit_CaseLearningTest_Where {
+input LearningPathUnit_CaseLearningTests_Where {
   """"""
-  findOne: LearningPathUnit_CaseLearningTest_WhereConnection
+  findOne: LearningPathUnit_CaseLearningTests_WhereConnection
 }
 
 """"""
-input LearningPathUnit_CaseLearningTest_WhereConnection {
+input LearningPathUnit_CaseLearningTests_WhereConnection {
   """"""
   Case: Case_Nested_Where
 }
@@ -1579,18 +1514,6 @@ input LearningPathUnit_ContentPieces_WhereConnection {
 }
 
 """"""
-input LearningPathUnit_LearningTests_Where {
-  """"""
-  findOne: LearningPathUnit_LearningTests_WhereConnection
-}
-
-""""""
-input LearningPathUnit_LearningTests_WhereConnection {
-  """"""
-  LearningTest: LearningTest_Nested_Where
-}
-
-""""""
 input LearningPathUnit_Nested_Where {
   """"""
   AND: [LearningPathUnit_Nested_Where]
@@ -1608,7 +1531,7 @@ input LearningPathUnit_Nested_Where {
 """"""
 input LearningPathUnit_Sort {
   """"""
-  caseLearningTest: Order
+  caseLearningTests: Order
 
   """"""
   contentPieces: Order
@@ -1621,9 +1544,6 @@ input LearningPathUnit_Sort {
 
   """"""
   ignoreOrder: Order
-
-  """"""
-  learningTests: Order
 
   """"""
   publishedAt: Order
@@ -1644,7 +1564,7 @@ input LearningPathUnit_Where {
   OR: [LearningPathUnit_Where]
 
   """"""
-  caseLearningTest: LearningPathUnit_CaseLearningTest_Where
+  caseLearningTests: LearningPathUnit_CaseLearningTests_Where
 
   """"""
   contentPieces: LearningPathUnit_ContentPieces_Where
@@ -1653,20 +1573,14 @@ input LearningPathUnit_Where {
   ignoreOrder: Boolean
 
   """"""
-  learningTests: LearningPathUnit_LearningTests_Where
-
-  """"""
   title: CaisyField_String_Where
 }
 
 """"""
-union LearningPathUnit_caseLearningTest = Case
+union LearningPathUnit_caseLearningTests = Case
 
 """"""
 union LearningPathUnit_contentPieces = Article | Case
-
-""""""
-union LearningPathUnit_learningTests = LearningTest
 
 """"""
 type LearningPath_Connection {
@@ -1771,142 +1685,6 @@ union LearningPath_description_Connections = Caisy_Field_Document_NotFound
 
 """"""
 union LearningPath_units = LearningPathUnit
-
-""""""
-type LearningTest {
-  """"""
-  _meta: CaisyDocument_Meta
-
-  """"""
-  content(locale: String): LearningTest_content
-
-  """"""
-  gamifications(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [LearningTest_gamifications]
-
-  """"""
-  id: ID
-}
-
-""""""
-type LearningTest_Connection {
-  """"""
-  edges: [LearningTest_ConnectionEdge]
-
-  """"""
-  pageInfo: PageInfo
-
-  """"""
-  totalCount: Int
-}
-
-""""""
-type LearningTest_ConnectionEdge {
-  """"""
-  cursor: String
-
-  """"""
-  node: LearningTest
-}
-
-""""""
-input LearningTest_Gamifications_Where {
-  """"""
-  findOne: LearningTest_Gamifications_WhereConnection
-}
-
-""""""
-input LearningTest_Gamifications_WhereConnection {
-  """"""
-  CardSelectionGame: CardSelectionGame_Nested_Where
-
-  """"""
-  DragNDropGame: DragNDropGame_Nested_Where
-
-  """"""
-  FillInGapsGame: FillInGapsGame_Nested_Where
-}
-
-""""""
-input LearningTest_Nested_Where {
-  """"""
-  AND: [LearningTest_Nested_Where]
-
-  """"""
-  OR: [LearningTest_Nested_Where]
-
-  """"""
-  content: CaisyField_Richtext_Where
-}
-
-""""""
-input LearningTest_Sort {
-  """"""
-  createdAt: Order
-
-  """"""
-  gamifications: Order
-
-  """"""
-  id: Order
-
-  """"""
-  publishedAt: Order
-
-  """"""
-  updatedAt: Order
-}
-
-""""""
-input LearningTest_Where {
-  """"""
-  AND: [LearningTest_Where]
-
-  """"""
-  OR: [LearningTest_Where]
-
-  """"""
-  content: CaisyField_Richtext_Where
-
-  """"""
-  gamifications: LearningTest_Gamifications_Where
-}
-
-""""""
-type LearningTest_content {
-  """"""
-  connections(
-    """
-    The cursor to start the pagination from. In this case the curser equals the id for the (last) element. If not set, we wil start from the beginning.
-    """
-    after: String
-
-    """The number of items to return. Default and max value is 100."""
-    first: Int = 100
-
-    """"""
-    locale: String
-  ): [LearningTest_content_Connections]
-
-  """"""
-  json: JSON
-}
-
-""""""
-union LearningTest_content_Connections = CardSelectionGame | DragNDropGame | FillInGapsGame
-
-""""""
-union LearningTest_gamifications = CardSelectionGame | DragNDropGame | FillInGapsGame
 
 """"""
 type LegalArea {
@@ -2153,9 +1931,6 @@ type Query {
   LearningPathUnit(id: ID!, locale: String): LearningPathUnit
 
   """"""
-  LearningTest(id: ID!, locale: String): LearningTest
-
-  """"""
   LegalArea(id: ID!, locale: String): LegalArea
 
   """"""
@@ -2202,9 +1977,6 @@ type Query {
 
   """"""
   allLearningPathUnit(after: String, before: String, first: Int, last: Int, locale: String, sort: [LearningPathUnit_Sort], where: [LearningPathUnit_Where]): LearningPathUnit_Connection
-
-  """"""
-  allLearningTest(after: String, before: String, first: Int, last: Int, locale: String, sort: [LearningTest_Sort], where: [LearningTest_Where]): LearningTest_Connection
 
   """"""
   allLegalArea(after: String, before: String, first: Int, last: Int, locale: String, sort: [LegalArea_Sort], where: [LegalArea_Where]): LegalArea_Connection

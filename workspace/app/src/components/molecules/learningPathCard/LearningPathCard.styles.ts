@@ -1,8 +1,8 @@
-import { type cardStatusType } from "@/components/molecules/learningPathCard/LearningPathCard";
+import { type LearningPathProgressState } from "@/hooks/useLearningPathProgress";
 
 import { css } from "@emotion/react";
 
-export const wrapper = (status: cardStatusType) => css`
+export const wrapper = (status: LearningPathProgressState) => css`
   color: inherit;
   background-color: ${status === "upcoming" ? "transparent" : "#F9F9F9"};
   border: 1px solid ${status === "completed" ? "#0AA949" : "#F0F0F0"};
@@ -10,8 +10,8 @@ export const wrapper = (status: cardStatusType) => css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 18px;
-  width: 240px;
+  padding: 16px 16px 20px;
+  width: 230px;
   text-align: center;
   height: 100%;
   transition: all 0.3s ease;
