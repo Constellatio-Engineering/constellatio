@@ -17,6 +17,7 @@ export type LearningPathUnitProps = {
   readonly index: number;
   readonly isLastUnit: boolean;
   readonly isLearningPathCompleted: boolean;
+  readonly learningPathId: string;
   readonly refetchGamesProgress: () => void;
   readonly unit: LearningPathWithProgress["units"][number];
 };
@@ -25,6 +26,7 @@ export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({
   index,
   isLastUnit,
   isLearningPathCompleted,
+  learningPathId,
   refetchGamesProgress,
   unit
 }) =>
@@ -69,22 +71,32 @@ export const LearningPathUnit: FunctionComponent<LearningPathUnitProps> = ({
             {contentPieces?.filter(Boolean).map(contentPiece => (
               <LearningPathContentPiece
                 key={contentPiece.id}
+                learningPathId={learningPathId}
+                unitId={unit.id!}
                 {...contentPiece}
               />
             ))}
           </div>
           <ul css={styles.testList}>
-            {caseLearningTests?.filter(Boolean).map((learningTest) => (
-              <LearningPathTest
-                key={learningTest.id}
-                {...learningTest}
-                refetchGamesProgress={refetchGamesProgress}
-                learningTest={learningTest}
-                openTest={() => setOpenedTest(learningTest.id!)}
-                openedTest={openedTest}
-                closeTest={() => setOpenedTest(null)}
-              />
-            ))}
+            {caseLearningTests?.filter(Boolean).map((learningTest) =>
+            {
+              if(learningTest.gamesWithProgress.length === 0)
+              {
+                return null;
+              }
+
+              return (
+                <LearningPathTest
+                  key={learningTest.id}
+                  {...learningTest}
+                  refetchGamesProgress={refetchGamesProgress}
+                  learningTest={learningTest}
+                  openTest={() => setOpenedTest(learningTest.id!)}
+                  openedTest={openedTest}
+                  closeTest={() => setOpenedTest(null)}
+                />
+              );
+            })}
           </ul>
         </div>
         {(isLearningPathCompleted && isLastUnit) && (

@@ -14,7 +14,6 @@ const IconButtonBar: FunctionComponent<{ readonly icons: IIcons[] }> = ({ icons 
 {
   return (
     <>
-
       {icons?.map(({
         click,
         size,

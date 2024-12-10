@@ -16,7 +16,7 @@ export const innerWrapper = css`
   max-width: 100%;
   width: 100%;
   display: flex;
-  gap: 50px;
+  gap: 35px;
   @media screen and (max-width: 1200px) {
     flex-direction: column;
   }
