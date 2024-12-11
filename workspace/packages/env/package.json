@@ -20,7 +20,8 @@
     "dev": "pnpm compile",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "typegen": "pnpm compile"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "catalog:",
