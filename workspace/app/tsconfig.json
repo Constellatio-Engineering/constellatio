@@ -1,29 +1,42 @@
 {
-	"extends": "@constellatio/tsconfig/base.json",
-	"compilerOptions": {
-		"jsx": "preserve",
-		"importHelpers": true,
-		"plugins": [
-			{ "name": "next" }
-		],
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./src/*"]
-		},
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"module": "esnext",
-		"sourceMap": true,
-		"jsxImportSource": "@emotion/react",
-		"target": "es2017",
-		"typeRoots": ["./node_modules/@types", "./types"],
-	},
-	"include": [
-		"next-env.d.ts",
-		".next/types/**/*.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		"**/*.cjs",
-		"**/*.mjs"
-	],
-	"exclude": ["node_modules"]
+  "extends": "@constellatio/tsconfig/base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "importHelpers": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "module": "esnext",
+    "sourceMap": true,
+    "target": "es2017",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
