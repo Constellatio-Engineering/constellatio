@@ -4,7 +4,7 @@ module.exports = {
   content: [
     './src/**/*.{ts,tsx}',
   ],
-  prefix: "tw-", // Damit wir keine Konflikte mit Mantine bekommen
+  // prefix: "tw-", // Damit wir keine Konflikte mit Mantine bekommen
   theme: {
   	container: {
   		center: true,
