@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-max-props-per-line */
+import "@/styles/globals.css";
 import { RouterTransition } from "@/components/atoms/RouterTransition/RouterTransition";
 import { ActivityWatchdog } from "@/components/helpers/activityWatchdog/ActivityWatchdog";
 import { AuthenticationRequiredProtection } from "@/components/helpers/authenticationRequiredProtection/AuthenticationRequiredProtection";
