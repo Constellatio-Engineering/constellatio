@@ -15,6 +15,9 @@ catalogs:
     '@supabase/auth-helpers-react':
       specifier: 0.5.0
       version: 0.5.0
+    '@supabase/ssr':
+      specifier: 0.5.1
+      version: 0.5.1
     '@t3-oss/env-nextjs':
       specifier: 0.10.1
       version: 0.10.1
@@ -224,6 +227,9 @@ importers:
       '@supabase/gotrue-js':
         specifier: 2.64.3
         version: 2.64.3
+      '@supabase/ssr':
+        specifier: 'catalog:'
+        version: 0.5.1(@supabase/supabase-js@2.44.3)
       '@supabase/supabase-js':
         specifier: 2.44.3
         version: 2.44.3
@@ -326,6 +332,9 @@ importers:
       next-i18next:
         specifier: 15.3.1
         version: 15.3.1(i18next@23.11.3)(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-i18next@15.0.2(i18next@23.11.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)
+      next-themes:
+        specifier: 0.4.4
+        version: 0.4.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-usequerystate:
         specifier: 1.20.0
         version: 1.20.0(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))
@@ -368,6 +377,9 @@ importers:
       slugify:
         specifier: 1.6.6
         version: 1.6.6
+      sonner:
+        specifier: 1.7.1
+        version: 1.7.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       stripe:
         specifier: 'catalog:'
         version: 16.9.0
@@ -483,6 +495,9 @@ importers:
       '@supabase/auth-helpers-react':
         specifier: 'catalog:'
         version: 0.5.0(@supabase/supabase-js@2.44.3)
+      '@supabase/ssr':
+        specifier: 'catalog:'
+        version: 0.5.1(@supabase/supabase-js@2.44.3)
       '@trpc/react-query':
         specifier: 'catalog:'
         version: 11.0.0-rc.569(@tanstack/react-query@5.59.15(react@18.2.0))(@trpc/client@11.0.0-rc.569(@trpc/server@11.0.0-rc.569))(@trpc/server@11.0.0-rc.569)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1644,6 +1659,12 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
+  '@floating-ui/react-dom@2.1.2':
+    resolution: {integrity: sha512-06okr5cgPzMNBy+Ycse2A6udMi4bqwW/zgBF/rwjcNqWkyr82Mcg8b0vjX8OJpZFy/FKjJmw6wV7t44kK6kW7A==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   '@floating-ui/react@0.19.2':
     resolution: {integrity: sha512-JyNk4A0Ezirq8FlXECvRtQOX/iBe5Ize0W/pLkrZjfHW9GUV7Xnq6zm6fyZuQzaHHqEnVizmvlA96e1/CkZv+w==}
     peerDependencies:
@@ -2723,6 +2744,11 @@ packages:
   '@supabase/realtime-js@2.10.2':
     resolution: {integrity: sha512-qyCQaNg90HmJstsvr2aJNxK2zgoKh9ZZA8oqb7UT2LCh3mj9zpa3Iwu167AuyNxsxrUE8eEJ2yH6wLCij4EApA==}
 
+  '@supabase/ssr@0.5.1':
+    resolution: {integrity: sha512-+G94H/GZG0nErZ3FQV9yJmsC5Rj7dmcfCAwOt37hxeR1La+QTl8cE9whzYwPUrTJjMLGNXoO+1BMvVxwBAbz4g==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.43.4
+
   '@supabase/storage-js@2.6.0':
     resolution: {integrity: sha512-REAxr7myf+3utMkI2oOmZ6sdplMZZ71/2NEIEMBZHL9Fkmm3/JnaOZVSRqvG4LStYj2v5WhCruCzuMn6oD/Drw==}
 
@@ -3714,6 +3740,10 @@ packages:
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
+
+  cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
+    engines: {node: '>= 0.6'}
 
   copy-anything@3.0.5:
     resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
@@ -5603,6 +5633,12 @@ packages:
       react: '>= 17.0.2'
       react-i18next: '>= 13.5.0'
 
+  next-themes@0.4.4:
+    resolution: {integrity: sha512-LDQ2qIOJF0VnuVrrMSMLrWGjRMkq+0mpgl6e0juCLqdJ+oo8Q84JRWT6Wh11VDQKkMMe+dVzDKLWs5n87T+PkQ==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+
   next-usequerystate@1.20.0:
     resolution: {integrity: sha512-0uXOYkOHXiTwrnBwZ3E6pT2l1HWoqgCxjcJE58TRSbhYjNnpQ9MxzgwoU7z6akQuQodWQffTh+HNLZRwoh1ujQ==}
     peerDependencies:
@@ -6558,6 +6594,12 @@ packages:
   socks@2.8.3:
     resolution: {integrity: sha512-l5x7VUUWbjVFbafGLxPWkYsHIhEvmF85tbIeFZWc8ZPtoMyybuEhL7Jye/ooC4/d48FgOjSJXgsF/AJPYCW8Zw==}
     engines: {node: '>= 10.0.0', npm: '>= 3.0.0'}
+
+  sonner@1.7.1:
+    resolution: {integrity: sha512-b6LHBfH32SoVasRFECrdY8p8s7hXPDn3OHUFbZZbiB1ctLS9Gdh6rpX2dVrpQA0kiL5jcRzDDldwwLkSKk3+QQ==}
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -8015,6 +8057,12 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@floating-ui/react-dom@2.1.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@floating-ui/dom': 1.6.12
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
   '@floating-ui/react@0.19.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@floating-ui/react-dom': 1.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -9302,6 +9350,11 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@supabase/ssr@0.5.1(@supabase/supabase-js@2.44.3)':
+    dependencies:
+      '@supabase/supabase-js': 2.44.3
+      cookie: 0.6.0
+
   '@supabase/storage-js@2.6.0':
     dependencies:
       '@supabase/node-fetch': 2.6.15
@@ -10504,6 +10557,8 @@ snapshots:
   convert-source-map@1.9.0: {}
 
   convert-source-map@2.0.0: {}
+
+  cookie@0.6.0: {}
 
   copy-anything@3.0.5:
     dependencies:
@@ -12547,6 +12602,11 @@ snapshots:
       react: 18.2.0
       react-i18next: 15.0.2(i18next@23.11.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
 
+  next-themes@0.4.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+
   next-usequerystate@1.20.0(next@14.2.15(@babel/core@7.26.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)):
     dependencies:
       mitt: 3.0.1
@@ -13652,6 +13712,11 @@ snapshots:
     dependencies:
       ip-address: 9.0.5
       smart-buffer: 4.2.0
+
+  sonner@1.7.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   source-map-js@1.2.1: {}
 

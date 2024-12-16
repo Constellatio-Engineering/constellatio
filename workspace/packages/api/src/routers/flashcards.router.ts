@@ -51,6 +51,18 @@ export const flashcardsRouter = createTRPCRouter({
     {
       const queryConditions: SQLWrapper[] = [eq(flashcards.userId, userId)];
 
+      if(!collectionId)
+      {
+        const result = await db.query.flashcards.findMany({
+          where(fields, { eq }) 
+          {
+            return eq(fields.userId, userId);
+          },
+        });
+  
+        return result;
+      }
+
       return [];
 
       /* if(collectionId)

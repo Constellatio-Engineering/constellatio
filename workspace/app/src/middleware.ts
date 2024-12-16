@@ -117,3 +117,8 @@ export const config = {
     "/((?!api|login|register|confirm|finish-signup|recover|static|.*\\..*|_next|extension|tests).*)",
   ],
 };
+
+/* 
+  TODO: 
+    - Hier müssen wir schauen, wie wir sowohl app router logic als auch app router logic unterstützen können (supabase)
+*/

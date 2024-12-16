@@ -8,6 +8,10 @@
       "types": "./dist/index.d.ts",
       "default": "./index.ts"
     },
+    "./appRouterSpecific/index": {
+      "types": "./dist/src/appRouterSpecific/index.d.ts",
+      "default": "./src/appRouterSpecific/index.ts"
+    },
     "./lib/*": {
       "types": "./dist/src/lib/*.d.ts",
       "default": "./src/lib/*.ts"
@@ -47,6 +51,7 @@
     "@google-cloud/storage": "catalog:",
     "@supabase/auth-helpers-nextjs": "catalog:",
     "@supabase/auth-helpers-react": "catalog:",
+    "@supabase/ssr": "catalog:",
     "@trpc/react-query": "catalog:",
     "@trpc/server": "catalog:",
     "@upstash/ratelimit": "2.0.4",

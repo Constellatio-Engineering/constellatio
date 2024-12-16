@@ -6,6 +6,7 @@ import { bookmarksRouter } from "./routers/bookmarks.router";
 import { caisyRouter } from "./routers/caisy.router";
 import { caseProgressRouter } from "./routers/caseProgress.router";
 import { documentsRouter } from "./routers/documents.router";
+import { flashcardsRouter } from "./routers/flashcards.router";
 import { foldersRouter } from "./routers/folders.router";
 import { forumRouter } from "./routers/forum.router";
 import { gamesProgressRouter } from "./routers/gamesProgress.router";
@@ -34,6 +35,7 @@ export const appRouter = createTRPCRouter({
   caisy: caisyRouter,
   casesProgress: caseProgressRouter,
   documents: documentsRouter,
+  flashcards: flashcardsRouter,
   folders: foldersRouter,
   forum: forumRouter,
   gamesProgress: gamesProgressRouter,
