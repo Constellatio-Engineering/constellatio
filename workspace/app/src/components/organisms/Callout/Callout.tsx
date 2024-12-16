@@ -70,7 +70,7 @@ export const Callout: FC<CalloutProps> = ({ calloutType, text }) =>
   }, [onSizeChange]);
 
   return (
-    <Stack spacing="spacing-4" sx={styles.calloutStyles(theme)}>
+    <Stack spacing="spacing-4" sx={styles.calloutStyles(theme, calloutType)}>
       <Group spacing="spacing-8">
         <HeadingType calloutType={calloutType}/>
       </Group>
