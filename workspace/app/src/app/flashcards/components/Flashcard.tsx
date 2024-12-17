@@ -7,6 +7,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { toast } from "@/components/ui/sonner";
+import useDeleteFlashcard from "@/hooks/useDeleteFlashcard";
 import { api } from "@/utils/api";
 
 import {
@@ -44,23 +45,8 @@ export function Flashcard({
 {
   const [showAnswer, setShowAnswer] = useState(false);
 
-  // utils to invalidate
-  // TODO: set it to custom hook?
-  const utils = api.useUtils();
-
   const { isPending: deleteFlashcardIsPending, mutateAsync: deleteFlashcard } =
-    api.flashcards.deleteFlashcard.useMutation({
-      onError: (error) => 
-      {
-        toast.error("Failed to delete flashcard", {
-          description: error.message,
-        });
-      },
-      onSettled: async () => 
-      {
-        return utils.flashcards.getFlashcards.invalidate();
-      },
-    });
+    useDeleteFlashcard();
 
   // Memoized toggle answer to prevent unnecessary re-renders
   const toggleAnswer = useCallback(() => 
@@ -71,15 +57,7 @@ export function Flashcard({
   // Memoized delete handler with error handling
   const onDelete = useCallback(async () => 
   {
-    try 
-    {
-      await deleteFlashcard({ id });
-      toast.success("Flashcard deleted successfully");
-    }
-    catch (error) 
-    {
-      // Error handling is done in the mutation options
-    }
+    await deleteFlashcard({ id });
   }, [id, deleteFlashcard]);
 
   return (

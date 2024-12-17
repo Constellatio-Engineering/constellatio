@@ -27,6 +27,7 @@ export function ToolbarButton({
       pressed={isActive}
       onPressedChange={onClick}
       title={title}
+      className="h-8 w-8 p-0 data-[state=on]:bg-muted data-[state=on]:text-muted-foreground"
     >
       <Icon className="h-4 w-4" />
     </Toggle>

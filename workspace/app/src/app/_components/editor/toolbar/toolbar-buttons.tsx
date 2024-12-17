@@ -4,6 +4,7 @@ import { Editor } from "@tiptap/react";
 import {
   Bold,
   Italic,
+  Underline,
   List,
   ListOrdered,
   Heading1,
@@ -12,6 +13,9 @@ import {
   Code,
   Quote,
   Strikethrough,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
 } from "lucide-react";
 import { ToolbarButton } from "./toolbar-button";
 import { Separator } from "@/components/ui/separator";
@@ -36,6 +40,12 @@ export function ToolbarButtons({ editor }: ToolbarButtonsProps) {
         isActive: editor.isActive("italic"),
         onClick: () => editor.chain().focus().toggleItalic().run(),
         title: "Italic",
+      },
+      {
+        icon: Underline,
+        isActive: editor.isActive("underline"),
+        onClick: () => editor.chain().focus().toggleUnderline().run(),
+        title: "Underline",
       },
       {
         icon: Strikethrough,
@@ -80,6 +90,26 @@ export function ToolbarButtons({ editor }: ToolbarButtonsProps) {
     ],
     [
       {
+        icon: AlignLeft,
+        isActive: editor.isActive({ textAlign: "left" }),
+        onClick: () => editor.chain().focus().setTextAlign("left").run(),
+        title: "Align Left",
+      },
+      {
+        icon: AlignCenter,
+        isActive: editor.isActive({ textAlign: "center" }),
+        onClick: () => editor.chain().focus().setTextAlign("center").run(),
+        title: "Align Center",
+      },
+      {
+        icon: AlignRight,
+        isActive: editor.isActive({ textAlign: "right" }),
+        onClick: () => editor.chain().focus().setTextAlign("right").run(),
+        title: "Align Right",
+      },
+    ],
+    [
+      {
         icon: Code,
         isActive: editor.isActive("code"),
         onClick: () => editor.chain().focus().toggleCode().run(),
@@ -95,7 +125,7 @@ export function ToolbarButtons({ editor }: ToolbarButtonsProps) {
   ];
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center">
       {buttons.map((group, groupIndex) => (
         <div key={groupIndex} className="flex items-center">
           {group.map((button, buttonIndex) => (
@@ -106,7 +136,7 @@ export function ToolbarButtons({ editor }: ToolbarButtonsProps) {
             />
           ))}
           {groupIndex < buttons.length - 1 && (
-            <Separator orientation="vertical" className="mx-1 h-6" />
+            <div className="mx-2 h-6 w-px bg-border" />
           )}
         </div>
       ))}

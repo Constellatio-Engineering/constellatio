@@ -4,6 +4,7 @@ import { MinimalTiptapEditor } from "@/app/_components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import useCreateFlashcard from "@/hooks/useCreateFlashcard";
+import useFlashcards from "@/hooks/useFlashcards";
 import { api } from "@/trpc/react";
 
 import { useCallback } from "react";
@@ -63,41 +64,11 @@ const flashcardData = [
 export default function PrototypePage() 
 {
   // get flashcards TODO: outsource to custom hook -> AI
-  const { data: flashcards, error, isLoading } = api.flashcards.getFlashcards.useQuery({ collectionId: undefined });
-
-  // utils to invalidate
-  const utils = api.useUtils();
-
-  const { mutateAsync: createFlashcard } = useCreateFlashcard();
-
-  // TODO: outsource to custom hook -> AI
-  const { isPending: deleteFlashcardIsPending, mutateAsync: deleteFlashcard } =
-    api.flashcards.deleteFlashcard.useMutation({
-      onError: (error) => 
-      {
-        toast.error("Failed to delete flashcard", {
-          description: error.message,
-        });
-      },
-      onSettled: async () => 
-      {
-        return utils.flashcards.getFlashcards.invalidate();
-      },
-    });
-
-  const onCreate = useCallback(async () => 
-  {
-    console.log("kommt in onCreate");
-
-    await createFlashcard({
-      answer: "test1",
-      collectionId: null,
-      question: "What is working and what not?",
-    });
-  }, [createFlashcard]);
+  const { data: flashcards = [], error, isLoading } = useFlashcards();
 
   if(isLoading) 
   {
+    // TODO: grid with skeletons
     return "LOADING FLASHCARDS ON CLIENT";
   }
 

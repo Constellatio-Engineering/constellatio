@@ -16,7 +16,7 @@ const TipTapEditor = ({ content, onChange, placeholder }: TipTapEditorProps) => 
     content,
     editorProps: {
       attributes: {
-        class: "prose prose-sm sm:prose-base focus:outline-none min-h-[200px] px-3 py-2 overflow-y-auto max-h-[400px]",
+        class: "prose prose-sm sm:prose-base focus:outline-none px-4 py-3 min-h-[200px] overflow-y-auto max-h-[400px]",
         "data-placeholder": placeholder,
       },
     },
@@ -26,7 +26,7 @@ const TipTapEditor = ({ content, onChange, placeholder }: TipTapEditorProps) => 
   });
 
   return (
-    <div className="border rounded-md bg-white">
+    <div className="rounded-lg border bg-white overflow-hidden">
       <EditorToolbar editor={editor} />
       <EditorContent editor={editor} />
     </div>

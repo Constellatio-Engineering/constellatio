@@ -34,11 +34,11 @@ export const flashcardsRouter = createTRPCRouter({
       }
       console.log("schafft es bis api 4.");
       
-      if(newFlashcard.collectionId)
+      if(newFlashcard.setId)
       {
         await db.insert(flashcardsToCollections).values({
-          collectionId: newFlashcard.collectionId,
-          flashcardId: insertedFlashcard.id
+          flashcardId: insertedFlashcard.id,
+          setId: newFlashcard.setId
         });
       }
       console.log("schafft es bis api 5.");
@@ -54,11 +54,11 @@ export const flashcardsRouter = createTRPCRouter({
     }),
   getFlashcards: protectedProcedure
     .input(getFlashcardsSchema)
-    .query(async ({ ctx: { userId }, input: { collectionId } }) =>
+    .query(async ({ ctx: { userId }, input: { setId } }) =>
     {
       const queryConditions: SQLWrapper[] = [eq(flashcards.userId, userId)];
 
-      if(!collectionId)
+      if(!setId)
       {
         const result = await db.query.flashcards.findMany({
           where(fields, { eq }) 
@@ -72,7 +72,7 @@ export const flashcardsRouter = createTRPCRouter({
 
       return [];
 
-      /* if(collectionId)
+      /* if(setId)
       {
         queryConditions.push(eq(fla.folderId, folderId));
       }
@@ -90,6 +90,28 @@ export const flashcardsRouter = createTRPCRouter({
       const documentsWithTags = await addTags(documentsFromDb);
       return documentsWithTags;*/
     }),
+  // sub router
+  getFlashcardsSets: protectedProcedure
+    // .input() -> later if some conditions are usefull
+    .query(async ({ ctx: { userId } }) =>
+    {
+      try 
+      {
+        return await db.query.flashcardsSets.findMany({
+          where(fields, { eq }) 
+          {
+            return eq(fields.userId, userId);
+          },
+        });
+      }
+      catch (error) 
+      {
+        console.log(error);
+      }
+      
+      return [];
+    }),
+  
   updateFlashcard: protectedProcedure
     .input(updateFlashcardSchema)
     .mutation(async ({ ctx: { userId }, input: flashcardUpdate }) =>
@@ -110,7 +132,7 @@ export const flashcardsRouter = createTRPCRouter({
         .returning();
 
       return updatedFlashcard;
-    })
+    }),
 });
 
 export type GetFlashcardsResult = inferProcedureOutput<typeof flashcardsRouter.getFlashcards>;

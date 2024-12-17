@@ -12,33 +12,46 @@ import {
 } from "@/components/ui/form";
 import useCreateFlashcard from "@/hooks/useCreateFlashcard";
 
-import { createFlashcardSchema, type CreateFlashcardSchema } from "@constellatio/schemas/routers/flashcards/createFlashcard.schema";
+import {
+  createFlashcardSchema,
+  type CreateFlashcardSchema,
+} from "@constellatio/schemas/routers/flashcards/createFlashcard.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useForm } from "react-hook-form";
 
-import { CollectionSelect } from "./collection-select";
+import { FlashcardsSetsSelect } from "./flashcards-sets-select";
 
 export function FlashcardForm() 
 {
-  const { createFlashcard, creatFlashcardIsPending } = useCreateFlashcard();
-
   const form = useForm<CreateFlashcardSchema>({
     defaultValues: {
       answer: "",
-      collectionId: "",
       question: "",
+      sets: [],
     },
     resolver: zodResolver(createFlashcardSchema),
   });
 
+  const { isPending: createFlashcardIsPending, mutateAsync: createFlashcard } =
+    useCreateFlashcard();
+
   const onSubmit = async (data: CreateFlashcardSchema) => 
   {
-    const success = await createFlashcard(data);
-    if(success) 
-    {
-      form.reset();
-    }
+    console.log("Form submitted with values:", {
+      answer: data.answer,
+      question: data.question,
+      sets: data.sets,
+    });
+
+    await createFlashcard({
+      answer: data.answer,
+      question: data.question,
+      // FIXME: endpoint dnekt noch er bekommt einzelne uuid! ändern in array
+      sets: data.sets,
+    });
+
+    form.reset();
   };
 
   return (
@@ -46,12 +59,13 @@ export function FlashcardForm()
       <form onSubmit={form.handleSubmit(onSubmit)} className="py-4 space-y-4">
         <FormField
           control={form.control}
-          name="collectionId"
+          name="sets"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Assign To Set</FormLabel>
               <FormControl>
-                <CollectionSelect
+                <FlashcardsSetsSelect
+                // fix uuid -> uuid[] ...
                   value={field.value}
                   onSelect={field.onChange}
                 />
@@ -98,12 +112,13 @@ export function FlashcardForm()
         </div>
         <div className="flex justify-end gap-2">
           <DialogClose asChild>
-            <Button type="button" variant="outline">
+            <Button type="button" variant="secondary">
               Cancel
             </Button>
           </DialogClose>
-          <Button type="submit" disabled={creatFlashcardIsPending}>
-            {creatFlashcardIsPending ? "Creating..." : "Create"}
+          {/* TODO: loading spinner if createFlashcardIsPending */}
+          <Button type="submit" disabled={createFlashcardIsPending}>
+            Create
           </Button>
         </div>
       </form>

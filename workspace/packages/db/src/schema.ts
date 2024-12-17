@@ -748,7 +748,7 @@ export type ContentViewInsert = InferInsertModel<typeof contentViews>;
 export type ContentView = InferSelectModel<typeof contentViews>;
 export type ContentViewSql = InferPgSelectModel<typeof contentViews>;
 
-export const flashcardsCollections = pgTable("FlashcardsCollection", {
+export const flashcardsSets = pgTable("FlashcardsSet", {
   id: uuid("Id").primaryKey().defaultRandom().notNull(),
   index: serial("Index"),
   createdAt: timestamp("CreatedAt").defaultNow().notNull(),
@@ -757,16 +757,16 @@ export const flashcardsCollections = pgTable("FlashcardsCollection", {
   name: text("Name").notNull(),
   description: text("Description").notNull(),
 }, table => [
-  index("FlashcardsCollection_UserId_FK_Index").on(table.userId),
+  index("FlashcardsSet_UserId_FK_Index").on(table.userId),
 ]).enableRLS();
 
-export const flashcardsCollectionsRelations = relations(flashcardsCollections, ({ many }) => ({
-  flashcardsToCollections: many(flashcardsToCollections),
+export const flashcardsSetsRelations = relations(flashcardsSets, ({ many }) => ({
+  flashcardsToSets: many(flashcardsToSets),
 }));
 
-export type FlashcardsCollectionInsert = InferInsertModel<typeof flashcardsCollections>;
-export type FlashcardsCollection = InferSelectModel<typeof flashcardsCollections>;
-export type FlashcardsCollectionSql = InferPgSelectModel<typeof flashcardsCollections>;
+export type FlashcardsSetInsert = InferInsertModel<typeof flashcardsSets>;
+export type FlashcardsSet = InferSelectModel<typeof flashcardsSets>;
+export type FlashcardsSetSql = InferPgSelectModel<typeof flashcardsSets>;
 
 export const flashcards = pgTable("Flashcard", {
   id: uuid("Id").primaryKey().defaultRandom().notNull(),
@@ -781,33 +781,33 @@ export const flashcards = pgTable("Flashcard", {
 ]).enableRLS();
 
 export const flashcardsRelations = relations(flashcards, ({ many }) => ({
-  flashcardsToCollections: many(flashcardsToCollections),
+  flashcardsToSets: many(flashcardsToSets),
 }));
 
 export type FlashcardInsert = InferInsertModel<typeof flashcards>;
 export type Flashcard = InferSelectModel<typeof flashcards>;
 export type FlashcardSql = InferPgSelectModel<typeof flashcards>;
 
-export const flashcardsToCollections = pgTable("FlashcardsToCollections", {
+export const flashcardsToSets = pgTable("FlashcardsToSets", {
   flashcardId: uuid("FlashcardId").references(() => flashcards.id, { onDelete: "cascade" }).notNull(),
-  collectionId: uuid("CollectionId").references(() => flashcardsCollections.id, { onDelete: "no action" }).notNull(),
+  setId: uuid("SetId").references(() => flashcardsSets.id, { onDelete: "no action" }).notNull(),
 }, table => [
-  primaryKey({ columns: [table.flashcardId, table.collectionId] }),
-  index("FlashcardsToCollections_FlashcardId_FK_Index").on(table.flashcardId),
-  index("FlashcardsToCollections_CollectionId_FK_Index").on(table.collectionId),
+  primaryKey({ columns: [table.flashcardId, table.setId] }),
+  index("FlashcardsToSets_FlashcardId_FK_Index").on(table.flashcardId),
+  index("FlashcardsToSets_SetId_FK_Index").on(table.setId),
 ]).enableRLS();
 
-export const flashcardsToCollectionsRelations = relations(flashcardsToCollections, ({ one }) => ({
+export const flashcardsToSetsRelations = relations(flashcardsToSets, ({ one }) => ({
   flashcard: one(flashcards, {
-    fields: [flashcardsToCollections.flashcardId],
+    fields: [flashcardsToSets.flashcardId],
     references: [flashcards.id],
   }),
-  collection: one(flashcardsCollections, {
-    fields: [flashcardsToCollections.collectionId],
-    references: [flashcardsCollections.id],
+  set: one(flashcardsSets, {
+    fields: [flashcardsToSets.setId],
+    references: [flashcardsSets.id],
   }),
 }));
 
-export type FlashcardsToCollectionsInsert = InferInsertModel<typeof flashcardsToCollections>;
-export type FlashcardsToCollections = InferSelectModel<typeof flashcardsToCollections>;
-export type FlashcardsToCollectionsSql = InferPgSelectModel<typeof flashcardsToCollections>;
+export type FlashcardsToSetsInsert = InferInsertModel<typeof flashcardsToSets>;
+export type FlashcardsToSets = InferSelectModel<typeof flashcardsToSets>;
+export type FlashcardsToSetsSql = InferPgSelectModel<typeof flashcardsToSets>;

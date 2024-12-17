@@ -5,8 +5,8 @@ import { answerValidation, questionValidation } from "../../common/flashcards/fl
 
 export const createFlashcardSchema = z.object({
   answer: answerValidation,
-  collectionId: idValidation.nullable(),
   question: questionValidation,
+  sets: z.array(idValidation).nullable(),
 });
 
 export type CreateFlashcardSchema = z.input<typeof createFlashcardSchema>;
