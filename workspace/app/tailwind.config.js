@@ -13,6 +13,10 @@ module.exports = {
   			'2xl': '1400px'
   		}
   	},
+    fontFamily: {
+      sans: ['var(--font-karla)'],
+      serif: ['var(--font-libre-baskerville)'],
+    },
     colors: {
       border: "#B5B5B5",
       input: "#B5B5B5",
@@ -20,13 +24,7 @@ module.exports = {
       background: '#FFF',
       foreground: '#000',
       primary: {
-        DEFAULT: '#A90000',
-        0: '#FBDFDD',
-        1: '#EBAEA9',
-        2: '#D26D65',
-        3: '#BA3333',
-        4: '#A90000',
-        5: '#760000',
+        DEFAULT: '#000000',
         foreground: '#FFFFFF'
       },
       secondary: {
@@ -92,12 +90,19 @@ module.exports = {
         8: '#767676',
         9: '#4C4C4C',
         10: '#3D3D3D',
-        11: '#303030',
+        11: '#000000',
+        12: '#303030',
         foreground: '#4C4C4C'
       },
       accent: {
-        DEFAULT: '#F6F6F5',
-        foreground: '#4C4C4C'
+        DEFAULT: '#A90000',
+        0: '#FBDFDD',
+        1: '#EBAEA9',
+        2: '#D26D65',
+        3: '#BA3333',
+        4: '#A90000',
+        5: '#760000',
+        foreground: '#FFFFFF'
       },
       popover: {
         DEFAULT: '#FFF',
@@ -149,12 +154,32 @@ module.exports = {
         7: 'rgba(255, 255, 255, 0.8)',
         8: 'rgba(255, 255, 255, 0.9)',
         9: 'rgba(255, 255, 255, 0.97)'
+      },
+      "cc-cases": {
+        0: '#F4F6FE',
+        1: '#E9EDFD',
+        2: '#C7D3FB',
+        3: '#96A8E4', 
+        4: '#5B74C7',
+        5: '#3A4C88',
+      },
+      "cc-dictionary": {
+        0: '#F3F9F5',
+        1: '#E3F1EA',
+        2: '#C3DFCF',
+        3: '#A5CBB5',
+        4: '#83B899',
+        5: '#68937A',
+      },
+      "cc-forum": {
+        0: '#FEFDF1',
+        1: '#FDFADC',
+        2: '#FBF4B9',
+        3: '#EBE361',
+        4: '#D3C750',
+        5: '#999146',
       }
     },
-    borderRadius: {
-      lg: '.5rem',
-      md: 'calc(.5rem - 2px)',
-      sm: 'calc(.5rem - 4px)'
-    },
   },
+  plugins: [],
 }

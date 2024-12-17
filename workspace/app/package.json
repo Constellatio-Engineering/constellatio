@@ -64,6 +64,8 @@
     "@mantine/tiptap": "6.0.21",
     "@neondatabase/serverless": "0.10.1",
     "@next/third-parties": "14.2.15",
+    "@radix-ui/react-dialog": "1.1.2",
+    "@radix-ui/react-slot": "1.1.0",
     "@react-hook/resize-observer": "1.2.6",
     "@supabase/auth-helpers-nextjs": "catalog:",
     "@supabase/auth-helpers-react": "catalog:",
