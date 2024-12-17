@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider, ThemeToggle } from "@/components/ui/theme";
 import { cn } from "@/lib/utils";
+import InvalidateQueriesProvider from "@/provider/appRouterSpecific/InvalidateQueriesProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 import { env } from "@constellatio/env";
@@ -15,13 +16,12 @@ import "@/styles/globals.css";
 /* import Header from "./_components/layouts/global/header"; */
 
 export const metadata: Metadata = {
-  
   description: "Simple monorepo with shared backend for web & mobile apps",
-  
+
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
       ? "https://turbo.t3.gg"
-      : "http://localhost:3000",
+      : "http://localhost:3000"
   ),
   openGraph: {
     description: "Simple monorepo with shared backend for web & mobile apps",
@@ -46,7 +46,9 @@ export const viewport: Viewport = {
 
 /* export const experimental_ppr = true; */
 
-export default function RootLayout(props: { readonly children: React.ReactNode }) 
+export default function RootLayout(props: {
+  readonly children: React.ReactNode;
+}) 
 {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -56,9 +58,12 @@ export default function RootLayout(props: { readonly children: React.ReactNode }
           /* GeistSans.variable,
           GeistMono.variable, */
         )}>
+        {/* TODO: outsource the providers to a single file */}
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
-            {props.children}
+            <InvalidateQueriesProvider>
+              {props.children}
+            </InvalidateQueriesProvider>
           </TRPCReactProvider>
           {/* <div className="absolute bottom-4 right-4">
             <ThemeToggle/>

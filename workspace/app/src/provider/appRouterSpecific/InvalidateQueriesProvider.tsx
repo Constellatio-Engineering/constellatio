@@ -1,3 +1,4 @@
+"use client";
 import { searchResultsQueryKey } from "@/hooks/useSearchResults";
 import { api } from "@/utils/api";
 
@@ -66,24 +67,13 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
   const { invalidate: invalidateAll } = apiContext;
 
   const invalidateQueries: InvalidateQueries = useMemo(() => ({
-    
     invalidateAmountOfUnreadNotifications: async (options) => apiContext.notifications.getAmountOfUnreadNotifications.invalidate(options),
-
     invalidateBadges: async (options) => apiContext.badges.getBadges.invalidate(options),
-
     invalidateBookmarks: async (options) => apiContext.bookmarks.getAllBookmarks.invalidate(options),
-
     invalidateCaseProgress: async (options) => apiContext.casesProgress.getCaseProgress.invalidate(options),
-
     invalidateContentItemsViewsCount: async (options) => apiContext.views.getContentItemViewsCount.invalidate(options),
-
     invalidateDocuments: async (options) => apiContext.documents.getDocuments.invalidate(options),
-
     invalidateEverything: async () => invalidateAll(),
-    // TODO: fix this after that copy in new dir
-    // TODO: @Kotti
-    // invalidateFlashcard: async (options) => apiContext.flashcards.
-    invalidateFlashcards: async (options) => apiContext.flashcards.getFlashcards.invalidate(options),
     invalidateFolders: async (options) => apiContext.folders.getFolders.invalidate(options),
     invalidateForumAnswer: async (options) => apiContext.forum.getAnswerById.invalidate(options),
     invalidateForumAnswers: async (options) => apiContext.forum.getAnswers.invalidate(options),
@@ -131,7 +121,6 @@ const InvalidateQueriesProvider: FunctionComponent<InvalidateQueriesProviderProp
     apiContext.users.getUserDetails,
     apiContext.users.getOnboardingResult,
     apiContext.views.getSeenArticles,
-    apiContext.flashcards.getFlashcards,
     queryClient
   ]);
 

@@ -8,6 +8,14 @@ import { useCallback } from "react";
 
 import { Flashcard } from "./components/Flashcard";
 
+/* 
+Current plan:
+
+Button create flashcard open a modal 
+  - check modal from shadcn
+
+*/
+
 // TODO: remove test data
 const flashcardData = [
   {
@@ -51,6 +59,7 @@ export default function PrototypePage()
   
   const { mutateAsync: createFlashcard } = useCreateFlashcard();
 
+  // TODO: outsource to custom hook -> AI
   const { isPending: deleteFlashcardIsPending, mutateAsync: deleteFlashcard } = api.flashcards.deleteFlashcard.useMutation({
     onError: (error) => 
     {
@@ -67,6 +76,8 @@ export default function PrototypePage()
   const onCreate = useCallback(
     async () => 
     {
+      console.log("kommt in onCreate");
+      
       await createFlashcard({
         answer: "test1",
         collectionId: null,

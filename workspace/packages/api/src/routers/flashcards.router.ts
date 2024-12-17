@@ -15,19 +15,24 @@ export const flashcardsRouter = createTRPCRouter({
     .input(createFlashcardSchema)
     .mutation(async ({ ctx: { userId }, input: newFlashcard }) =>
     {
+      console.log("schafft es bis api 1.");
+      
       const flashcardInsert: FlashcardInsert = {
         answer: newFlashcard.answer,
         question: newFlashcard.question,
         userId
       };
-
+      console.log("schafft es bis api 2.");
+      
       const [insertedFlashcard] = await db.insert(flashcards).values(flashcardInsert).returning();
-
+      console.log("schafft es bis api 3.");
+      
       if(!insertedFlashcard)
       {
         throw new InternalServerError(new Error("insertedFlashcard was null after insertion"));
       }
-
+      console.log("schafft es bis api 4.");
+      
       if(newFlashcard.collectionId)
       {
         await db.insert(flashcardsToCollections).values({
@@ -35,6 +40,7 @@ export const flashcardsRouter = createTRPCRouter({
           flashcardId: insertedFlashcard.id
         });
       }
+      console.log("schafft es bis api 5.");
     }),
   deleteFlashcard: protectedProcedure
     .input(deleteFlashcardSchema)

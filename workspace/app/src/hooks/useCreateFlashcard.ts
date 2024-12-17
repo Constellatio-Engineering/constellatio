@@ -1,6 +1,7 @@
+"use client";
 import { toast } from "@/components/ui/sonner";
-import { InvalidateQueriesContext } from "@/provider/InvalidateQueriesProvider";
-import { api } from "@/utils/api";
+import { InvalidateQueriesContext } from "@/provider/appRouterSpecific/InvalidateQueriesProvider";
+import { api } from "@/trpc/react";
 
 import useContextAndErrorIfNull from "./useContextAndErrorIfNull";
 
@@ -17,18 +18,21 @@ const useCreateFlashcard = () =>
       // type of context is inferred as unknown for some reason
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       // utils.flashcards.getFlashcards.setData(undefined, (context as any).previousFlashcards);
-      console.log("Something went wrong while adding bookmark: ", { context, err, newFlashcard });
+      console.log("Something went wrong while adding flashcard: ", { context, err, newFlashcard });
 
       // TODO: ADD Toast (warning)
-      toast.error("Failed to delete flashcard", {
+      toast.error("Failed to create flashcard", {
         description: err.message
       });
     },
     onMutate: async (newFlashcard) =>
     {
+      console.log("schafft es bis 1.");
+      
       await utils.flashcards.getFlashcards.cancel();
       const previousFlashcards = utils.flashcards.getFlashcards.getData();
-
+      
+      console.log("schafft es bis 2.");
       // TODO: QUESTION @Kotti: is this for optimistic updates?
       // utils.flashcards.getFlashcards.setData({ resourceType: newFlashcard.resourceType }, (oldFlashcards = []) =>
       // {
@@ -39,7 +43,12 @@ const useCreateFlashcard = () =>
     },
     // TODO: ADD Toast (successfull)
     // TODO: QUESTION @Kotti: utils.flashcards.getFlashcards.invalidate();
-    onSettled: invalidateFlashcards 
+    // onSettled: async () => api.useUtils().flashcards.invalidate()// invalidateFlashcards 
+
+    onSettled: async () => 
+    {
+      return utils.flashcards.getFlashcards.invalidate();
+    }
   });
 };
 
