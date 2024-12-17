@@ -158,6 +158,9 @@ importers:
       '@hello-pangea/dnd':
         specifier: 16.6.0
         version: 16.6.0(@types/react-dom@18.2.14)(@types/react@18.2.31)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@hookform/resolvers':
+        specifier: 3.9.1
+        version: 3.9.1(react-hook-form@7.54.1(react@18.2.0))
       '@mantine/carousel':
         specifier: 6.0.21
         version: 6.0.21(@mantine/core@6.0.21(@emotion/react@11.11.4(@types/react@18.2.31)(react@18.2.0))(@mantine/hooks@6.0.21(react@18.2.0))(@types/react@18.2.31)(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(@mantine/hooks@6.0.21(react@18.2.0))(embla-carousel-react@7.1.0(react@18.2.0))(react@18.2.0)
@@ -404,6 +407,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      react-hook-form:
+        specifier: 7.54.1
+        version: 7.54.1(react@18.2.0)
       react-i18next:
         specifier: 15.0.2
         version: 15.0.2(i18next@23.11.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -1994,6 +2000,11 @@ packages:
     peerDependencies:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
+
+  '@hookform/resolvers@3.9.1':
+    resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -6605,6 +6616,12 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-hook-form@7.54.1:
+    resolution: {integrity: sha512-PUNzFwQeQ5oHiiTUO7GO/EJXGEtuun2Y1A59rLnZBBj+vNEOWt/3ERTiG1/zt7dVeJEM+4vDX/7XQ/qanuvPMg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-i18next@15.0.2:
     resolution: {integrity: sha512-z0W3/RES9Idv3MmJUcf0mDNeeMOUXe+xoL0kPfQPbDoZHmni/XsIoq5zgT2MCFUiau283GuBUK578uD/mkAbLQ==}
     peerDependencies:
@@ -9074,6 +9091,10 @@ snapshots:
       - '@types/react'
       - '@types/react-dom'
       - react-native
+
+  '@hookform/resolvers@3.9.1(react-hook-form@7.54.1(react@18.2.0))':
+    dependencies:
+      react-hook-form: 7.54.1(react@18.2.0)
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -14102,6 +14123,10 @@ snapshots:
       attr-accept: 2.2.4
       file-selector: 0.6.0
       prop-types: 15.8.1
+      react: 18.2.0
+
+  react-hook-form@7.54.1(react@18.2.0):
+    dependencies:
       react: 18.2.0
 
   react-i18next@15.0.2(i18next@23.11.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):

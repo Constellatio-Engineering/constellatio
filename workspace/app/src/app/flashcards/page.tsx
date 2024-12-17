@@ -9,7 +9,7 @@ import { api } from "@/trpc/react";
 import { useCallback } from "react";
 
 // import CreateFlashcardDialog from "./components/CreateFlashcardDialog";
-import { CreateFlashcardDialog2 } from "./components/create-flashcard-dialog";
+import { CreateFlashcardDialog } from "./components/create-flashcard-dialog";
 import { Flashcard } from "./components/Flashcard";
 
 /* 
@@ -108,7 +108,7 @@ export default function PrototypePage()
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <CreateFlashcardDialog2/>
+      <CreateFlashcardDialog/>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {flashcards.map((card) => (
           <Flashcard
@@ -125,3 +125,12 @@ export default function PrototypePage()
     </div>
   );
 }
+
+/* TODO:
+
+  - fix select is optional
+  - integrate schema validation on client side
+  - integrate schema validation on server side
+  - execute correct custom hook useCreateFlashcard on submit the form
+
+*/

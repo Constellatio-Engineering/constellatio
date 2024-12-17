@@ -12,7 +12,7 @@ const useCreateFlashcard = () =>
   const { invalidateFlashcards } = useContextAndErrorIfNull(InvalidateQueriesContext);
 
   // TODO: QUESTION @Kotti: why we set the data for query when the mutation go wrong? -> I think the data is still the same or?
-  return api.flashcards.createFlashcard.useMutation({
+  const { isPending: creatFlashcardIsPending, mutateAsync: createFlashcard } = api.flashcards.createFlashcard.useMutation({
     onError: (err, newFlashcard, context) =>
     {
       // type of context is inferred as unknown for some reason
@@ -47,9 +47,15 @@ const useCreateFlashcard = () =>
 
     onSettled: async () => 
     {
+      toast.success("Successfully created a new flashcard");
       return utils.flashcards.getFlashcards.invalidate();
     }
   });
+
+  return {
+    creatFlashcardIsPending,
+    createFlashcard,
+  };
 };
 
 export default useCreateFlashcard;
