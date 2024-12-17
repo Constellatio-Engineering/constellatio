@@ -1,6 +1,6 @@
 "use client";
 
-import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
+import { MinimalTiptapEditor } from "@/app/_components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import useCreateFlashcard from "@/hooks/useCreateFlashcard";
@@ -8,7 +8,8 @@ import { api } from "@/trpc/react";
 
 import { useCallback } from "react";
 
-import CreateFlashcardDialog from "./components/CreateFlashcardDialog";
+// import CreateFlashcardDialog from "./components/CreateFlashcardDialog";
+import { CreateFlashcardDialog2 } from "./components/create-flashcard-dialog";
 import { Flashcard } from "./components/Flashcard";
 
 /* 
@@ -107,7 +108,7 @@ export default function PrototypePage()
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <CreateFlashcardDialog/>
+      <CreateFlashcardDialog2/>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {flashcards.map((card) => (
           <Flashcard
