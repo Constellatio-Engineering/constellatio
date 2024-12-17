@@ -1,12 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
+import useCreateFlashcard from "@/hooks/useCreateFlashcard";
 import { api } from "@/trpc/react";
 
 import { useCallback } from "react";
 
 import { Flashcard } from "./components/Flashcard";
 
+// TODO: remove test data
 const flashcardData = [
   {
     answer: "€10,000 (office furniture worth €8,000 and two work laptops worth €2,000)",
@@ -46,21 +48,8 @@ export default function PrototypePage()
 
   // utils to invalidate
   const utils = api.useUtils();
-
-  // create flashcard tes
-  const { mutateAsync: createFlashcard } = api.flashcards.createFlashcard.useMutation({
-    onError: (error) => 
-    {
-      toast.error("Failed to delete flashcard", {
-        description: error.message
-      });
-    },
-    onSettled: async () => 
-    {
-        
-      return utils.flashcards.getFlashcards.invalidate();
-    }
-  });
+  
+  const { mutateAsync: createFlashcard } = useCreateFlashcard();
 
   const { isPending: deleteFlashcardIsPending, mutateAsync: deleteFlashcard } = api.flashcards.deleteFlashcard.useMutation({
     onError: (error) => 
@@ -71,7 +60,6 @@ export default function PrototypePage()
     },
     onSettled: async () => 
     {
-      
       return utils.flashcards.getFlashcards.invalidate();
     }
   });
@@ -99,7 +87,6 @@ export default function PrototypePage()
   }
 
   return (
-
     <div className="container mx-auto py-8 px-4">
       <Button onClick={onCreate}>Creat new Flashcard</Button>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
