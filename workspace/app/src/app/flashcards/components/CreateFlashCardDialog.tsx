@@ -1,17 +1,16 @@
+
 "use client";
 
+import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger 
 } from "@/components/ui/dialog";
-
-import { useState } from "react";
-
-import { RichTextEditor } from "./rich-text-editor";
-
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -19,74 +18,93 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import useCreateFlashcard from "@/hooks/useCreateFlashcard";
 
-interface CreateFlashcardDialogProps 
+import type { Content } from "@tiptap/react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+const CreateFlashcardDialog = () => 
 {
-  readonly onOpenChange: (open: boolean) => void;
-  readonly open: boolean;
-}
+  // State for tracking the content of both editors
+  const [questionContent, setQuestionContent] = useState<Content>("");
+  const [answerContent, setAnswerContent] = useState<Content>("");
+  
+  // State for tracking the selected set
+  const [selectedSet, setSelectedSet] = useState<string | null>(null);
+  
+  const { mutateAsync: createFlashcard } = useCreateFlashcard();
 
-export function CreateFlashcardDialog({ onOpenChange, open }: CreateFlashcardDialogProps) 
-{
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [set, setSet] = useState("");
-
-  const handleCreate = () => 
+  // Mock function to simulate creating a flashcard
+  const handleCreateFlashcard = async () => 
   {
-    // Handle flashcard creation here
-    console.log({ answer, question, set });
-    onOpenChange(false);
+    // Validate inputs
+    if(!questionContent || !answerContent) 
+    {
+      toast("Pls fill question and answer!");
+      return;
+    }
+
+    // Prepare data for backend submission
+    const flashcardData = {
+      answer: answerContent,
+      // set: selectedSet
+      collectionId: selectedSet,
+      
+      question: questionContent
+    };
+    
+    await createFlashcard(flashcardData);
+    console.log("Flashcard Data:", flashcardData);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button onClick={handleCreateFlashcard}>Creat new Flashcard</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Create a flashcard</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Assign To Set</label>
-            <Select value={set} onValueChange={setSet}>
+        <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="set">Assign To Set</Label>
+            <Select 
+              value={selectedSet}
+              onValueChange={setSelectedSet}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a set"/>
+                <SelectValue placeholder="Select a collection"/>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="exam">Exam Collection</SelectItem>
-                <SelectItem value="study">Study Notes</SelectItem>
-                <SelectItem value="general">General Knowledge</SelectItem>
+                <SelectItem value="study">Study Collection</SelectItem>
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">
-                QUESTION
-              </label>
-              <RichTextEditor
-                placeholder="Enter your question"
-                value={question}
-                onChange={setQuestion}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-muted-foreground">
-                ANSWER
-              </label>
-              <RichTextEditor
-                placeholder="Enter your answer"
-                allowImage
-                value={answer}
-                onChange={setAnswer}
-              />
-            </div>
+          <div className="grid gap-2">
+            <Label>Question</Label>
+            <MinimalTiptapEditor
+              value={questionContent}
+              onChange={setQuestionContent}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label>Answer</Label>
+            <MinimalTiptapEditor
+              value={answerContent}
+              onChange={setAnswerContent}
+            />
           </div>
         </div>
         <div className="flex justify-end">
-          <Button onClick={handleCreate}>Create</Button>
+          <Button onClick={handleCreateFlashcard}>
+            Create
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default CreateFlashcardDialog;

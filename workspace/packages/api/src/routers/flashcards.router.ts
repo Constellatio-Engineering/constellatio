@@ -12,6 +12,7 @@ import { InternalServerError } from "../utils/serverError";
 
 export const flashcardsRouter = createTRPCRouter({
   createFlashcard: protectedProcedure
+  // TODO: fix input (tiptap Content)
     .input(createFlashcardSchema)
     .mutation(async ({ ctx: { userId }, input: newFlashcard }) =>
     {

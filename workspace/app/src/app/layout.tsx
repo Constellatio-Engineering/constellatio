@@ -12,6 +12,7 @@ import React from "react";
 import { GeistSans } from "geist/font/sans"; */
 
 import "@/styles/globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 /* import Header from "./_components/layouts/global/header"; */
 
@@ -62,7 +63,9 @@ export default function RootLayout(props: {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
             <InvalidateQueriesProvider>
-              {props.children}
+              <TooltipProvider>
+                {props.children}
+              </TooltipProvider>
             </InvalidateQueriesProvider>
           </TRPCReactProvider>
           {/* <div className="absolute bottom-4 right-4">

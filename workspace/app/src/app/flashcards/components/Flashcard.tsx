@@ -17,10 +17,11 @@ import { useCallback, useState } from "react";
 
 import { FlashcardMenu } from "./FlashcardMenu";
 import { FlashcardStatus } from "./FlashcardStatus";
+import { RichTextRenderer } from "../../_components/RichTextRenderer";
 
 // TODO: QUESTION @Kotti: do you know this?
 // RouterOutputs["flashcards"]["getFlashcards"]
-// RouterOutputs["flashcards"]["getFlashcards"][number] 
+// RouterOutputs["flashcards"]["getFlashcards"][number]
 // TODO: use router output and extend with needed props
 interface FlashcardProps extends GetFlashcardResult 
 {
@@ -95,8 +96,15 @@ export function Flashcard({
       </CardHeader>
       <CardContent className="pt-4">
         <div className="min-h-[120px] space-y-4">
-          <h2 className="text-base font-medium leading-relaxed">{question}</h2>
-          {showAnswer && <div className="text-sm text-gray-600">{answer}</div>}
+          {/* Use RichTextRenderer for question */}
+          <h2 className="text-base font-medium leading-relaxed">
+            <RichTextRenderer content={question} className="prose max-w-none"/>
+          </h2>
+          {showAnswer && (
+            <div className="text-sm text-gray-600">
+              <RichTextRenderer content={answer} className="prose max-w-none"/>
+            </div>
+          )}
         </div>
       </CardContent>
       <CardFooter>
