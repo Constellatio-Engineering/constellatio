@@ -74,7 +74,7 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
       return (
         <>
           <NetworkChartIcon/>
-          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Verknüpftes Lernen</BodyText>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Vernetztes Lernen</BodyText>
         </>
       );
 
