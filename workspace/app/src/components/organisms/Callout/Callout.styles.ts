@@ -25,7 +25,7 @@ export const calloutStyles = (theme: MantineTheme, calloutType?: string|null): C
       break;
     case "definition":
     case "quote":
-      borderColor = colooors["cc-forum"][2];
+      borderColor = colooors["support-warning"][2];
       backgroundColor = colooors["neutrals-01"][0];
       break;
     case "example":
