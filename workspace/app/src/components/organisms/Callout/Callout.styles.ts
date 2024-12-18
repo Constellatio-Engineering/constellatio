@@ -20,12 +20,12 @@ export const calloutStyles = (theme: MantineTheme, calloutType?: string|null): C
     case "remember":
     case "connectedLearning":
     case "bestPractice":
-      borderColor = colooors["cc-dictionary"][3];
+      borderColor = colooors["brand-02"][3];
       backgroundColor = colooors["neutrals-01"][0];
       break;
     case "definition":
     case "quote":
-      borderColor = colooors["cc-forum"][3];
+      borderColor = colooors["cc-forum"][2];
       backgroundColor = colooors["neutrals-01"][0];
       break;
     case "example":
@@ -33,7 +33,7 @@ export const calloutStyles = (theme: MantineTheme, calloutType?: string|null): C
       backgroundColor = colooors["neutrals-01"][0];
       break;
     case "lawReference":
-      borderColor = colooors["brand-02"][3];
+      borderColor = colooors["cc-dictionary"][3];
       backgroundColor = colooors["neutrals-01"][0];
       break;
     case "specialProblem":
