@@ -32,7 +32,7 @@ export const tabs = [
   { slug: changeEmailTabSlug, title: "E-Mail ändern" },
   { slug: "change-password", title: "Passwort ändern" },
   { slug: subscriptionTabSlug, title: "Abonnement" },
-  { slug: "referral", title: "Freunde einladen" },
+  { slug: "referral", title: "Freunde werben" },
 ] as const;
 
 const ProfilePageContent: FunctionComponent = () =>
