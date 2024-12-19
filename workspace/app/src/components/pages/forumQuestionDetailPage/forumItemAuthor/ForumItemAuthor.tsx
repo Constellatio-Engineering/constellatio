@@ -4,6 +4,7 @@ import { AuthStateContext } from "@/provider/AuthStateProvider";
 import { type UserRole } from "@constellatio/db/schema";
 import { type Nullable } from "@constellatio/utility-types";
 import Image from "next/image";
+import Link from "next/link";
 import { type FunctionComponent, type ReactNode, useContext } from "react";
 
 import * as styles from "./ForumItemAuthor.styles";
@@ -38,13 +39,16 @@ const ForumItemAuthor: FunctionComponent<Props> = ({
   {
     if(externalAuthorityDisplayName != null && externalAuthorityUrl != null) 
     {
+      const fullUrl = externalAuthorityUrl.startsWith("http")
+        ? externalAuthorityUrl
+        : `https://${externalAuthorityUrl}`;
       authorityElement = (
         <div css={styles.authorityWrapper}>
           <a
             css={styles.legalAuthority}
-            href={externalAuthorityUrl}
+            href={fullUrl}
             target="_blank"
-            rel="noopener noreferrer">
+            rel="noreferrer">
             {externalAuthorityDisplayName}
           </a>
           <LinkExternalIcon size={10}/>
