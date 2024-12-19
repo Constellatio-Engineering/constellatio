@@ -131,8 +131,10 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     .with(subquery)
     .select({
       author: {
+        externalAuthorityDisplayName: users.externalAuthorityDisplayName,
+        externalAuthorityUrl: users.externalAuthorityUrl,
         id: users.id,
-        username: users.displayName,
+        username: users.displayName
       },
       createdAt: subquery.createdAt,
       hasCorrectAnswer: subquery.hasCorrectAnswer,
@@ -173,6 +175,11 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
               url: true,
               userId: true,
             },
+          },
+          usersToRoles: {
+            with: {
+              role: true
+            }
           }
         }
       }
@@ -186,6 +193,7 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
     let topicsIds: string[] = [];
     let authorProfilePictureUrl: string | null = null;
     let answersCount = 0;
+    let authorRoles: Array<{ description: string; id: string; identifier: Role; name: string }> = [];
 
     const questionData = questionsWithAdditionalData.find(q => q.id === question.id);
 
@@ -202,11 +210,22 @@ export const getQuestions = async (params: GetQuestionsParams) => // eslint-disa
       {
         authorProfilePictureUrl = getProfilePictureUrl(_authorProfilePictureUrl);
       }
+
+      authorRoles = questionData.user?.usersToRoles.map(userToRole => ({
+        description: userToRole.role.description,
+        id: userToRole.role.id,
+        identifier: userToRole.role.identifier,
+        name: userToRole.role.name
+      })) ?? [];
     }
 
     return {
       ...question,
       answersCount,
+      author: {
+        ...question.author,
+        roles: authorRoles
+      },
       authorProfilePictureUrl,
       legalFieldId,
       subfieldsIds,

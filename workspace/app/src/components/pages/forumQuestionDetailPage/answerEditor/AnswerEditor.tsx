@@ -43,6 +43,9 @@ const AnswerEditor: FunctionComponent<Props> = ({
         id={id}
         toolbarLeftContent={userDetails && (
           <ForumItemAuthor
+            externalAuthorityDisplayName={null}
+            externalAuthorityUrl={null}
+            roles={null}
             username={userDetails.displayName}
             userId={userDetails.id}
             profilePicture={userDetails.profilePicture?.url}

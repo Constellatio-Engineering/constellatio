@@ -228,6 +228,9 @@ export const ForumQuestionDetailPage: FunctionComponent<Props> = ({ questionId }
                   />
                   <div css={styles.authorAndDateWrapper}>
                     <ForumItemAuthor
+                      externalAuthorityDisplayName={question.author.externalAuthorityDisplayName}
+                      externalAuthorityUrl={question.author.externalAuthorityUrl}
+                      roles={question.author.roles}
                       username={question.author.username}
                       userId={question.author.id}
                       profilePicture={question.authorProfilePictureUrl}
