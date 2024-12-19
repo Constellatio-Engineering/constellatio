@@ -330,6 +330,13 @@
       "when": 1733169683205,
       "tag": "0072_hot_katie_power",
       "breakpoints": true
+    },
+    {
+      "idx": 73,
+      "version": "7",
+      "when": 1734533131012,
+      "tag": "0073_silly_blue_marvel",
+      "breakpoints": true
     }
   ]
 }

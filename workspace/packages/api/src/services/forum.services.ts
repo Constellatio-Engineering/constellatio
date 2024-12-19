@@ -16,6 +16,7 @@ import {
 } from "@constellatio/db/schema";
 import { type GetAnswersSchema } from "@constellatio/schemas/routers/forum/getAnswers.schema";
 import { type GetQuestionsSchema } from "@constellatio/schemas/routers/forum/getQuestions.schema";
+import { type Role } from "@constellatio/shared/validation";
 
 import { getProfilePictureUrl } from "../utils/users";
 
@@ -293,6 +294,8 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
     .with(countUpvotesSubquery)
     .select({
       author: {
+        externalAuthorityDisplayName: users.externalAuthorityDisplayName,
+        externalAuthorityUrl: users.externalAuthorityUrl,
         id: users.id,
         username: users.displayName,
       },
@@ -325,6 +328,11 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
               url: true,
               userId: true,
             },
+          },
+          usersToRoles: {
+            with: {
+              role: true
+            }
           }
         }
       }
@@ -334,21 +342,32 @@ export const getAnswers = async (params: GetAnswersParams) => // eslint-disable-
   const result = answersSortedWithAuthor.map(answer =>
   {
     let authorProfilePictureUrl: string | null = null;
+    let authorRoles: Array<{ description: string; id: string; identifier: Role; name: string }> = [];
 
     const answerData = answersWithAdditionalData.find(a => a.id === answer.id);
 
     if(answerData)
     {
       const _authorProfilePictureUrl = answerData.user?.profilePictures?.[0];
-
       if(_authorProfilePictureUrl)
       {
         authorProfilePictureUrl = getProfilePictureUrl(_authorProfilePictureUrl);
       }
+
+      authorRoles = answerData.user?.usersToRoles.map(userToRole => ({
+        description: userToRole.role.description,
+        id: userToRole.role.id,
+        identifier: userToRole.role.identifier,
+        name: userToRole.role.name
+      })) ?? [];
     }
 
     return {
       ...answer,
+      author: {
+        ...answer.author,
+        roles: authorRoles
+      },
       authorProfilePictureUrl,
     };
   });
