@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 
 export const title = () => css`
 color: ${colooors["neutrals-02"][1]};
+margin-bottom:32px;
 @media screen and (max-width: 1100px) {
     display: none;
 }
@@ -26,5 +27,5 @@ export const noReferralCode = css`
 
 export const hinweis = css`
     margin-top: 16px;
-    font-size: 14px;
+    font-size: 16px;
 `;

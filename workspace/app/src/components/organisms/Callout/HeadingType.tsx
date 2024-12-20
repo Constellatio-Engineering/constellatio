@@ -3,6 +3,7 @@ import { AlertStoke } from "@/components/Icons/AlertStroke";
 import { Article } from "@/components/Icons/Article";
 import { Bookmark } from "@/components/Icons/Bookmark";
 import { MedalIcon } from "@/components/Icons/MedalIcon";
+import { NetworkChartIcon } from "@/components/Icons/NetworkChartIcon";
 import { Pen } from "@/components/Icons/Pen";
 import { Quote } from "@/components/Icons/Quote";
 import { StarIcon } from "@/components/Icons/StarIcon";
@@ -67,6 +68,13 @@ export const HeadingType: FunctionComponent<Pick<IGenCallout, "calloutType">> = 
         <>
           <AlertStoke/>
           <BodyText component="p" styleType="body-01-bold" tt="capitalize">Problem</BodyText>
+        </>
+      );
+    case "connectedLearning":
+      return (
+        <>
+          <NetworkChartIcon/>
+          <BodyText component="p" styleType="body-01-bold" tt="capitalize">Vernetztes Lernen</BodyText>
         </>
       );
 

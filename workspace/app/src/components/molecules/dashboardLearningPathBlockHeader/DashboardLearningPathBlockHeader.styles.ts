@@ -3,7 +3,7 @@ import { colooors } from "@/constants/styles/colors";
 import { css } from "@emotion/react";
 
 export const wrapper = css`
-  width: 260px;
+  width: 280px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;

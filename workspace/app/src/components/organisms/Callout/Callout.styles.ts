@@ -11,14 +11,48 @@ type CalloutStyles = MantineCssObjectStyles;
 
 export const collapsedHeight = 100;
 
-export const calloutStyles = (theme: MantineTheme): CalloutStyles =>
+export const calloutStyles = (theme: MantineTheme, calloutType?: string|null): CalloutStyles =>
 {
-  const styles = (): CSSObject => ({
-    backgroundColor: colooors["neutrals-01"][0],
-    borderRadius: theme.radius["radius-12"],
-    borderTop: `8px solid ${colooors["support-warning"][2]}`,
-    padding: spaciiing["spacing-24"],
-  });
+  let borderColor: string = colooors["cc-forum"][3];
+  let backgroundColor: string = colooors["neutrals-01"][0];
+  switch (calloutType) 
+  {
+    case "remember":
+    case "connectedLearning":
+    case "bestPractice":
+      borderColor = colooors["brand-02"][3];
+      backgroundColor = colooors["neutrals-01"][0];
+      break;
+    case "definition":
+    case "quote":
+      borderColor = colooors["support-warning"][2];
+      backgroundColor = colooors["neutrals-01"][0];
+      break;
+    case "example":
+      borderColor = colooors["cc-cases"][3];
+      backgroundColor = colooors["neutrals-01"][0];
+      break;
+    case "lawReference":
+      borderColor = colooors["cc-dictionary"][3];
+      backgroundColor = colooors["neutrals-01"][0];
+      break;
+    case "specialProblem":
+      borderColor = colooors["brand-01"][2];
+      backgroundColor = colooors["neutrals-01"][0];
+      break;
+    default:
+      borderColor = colooors["cc-forum"][3];
+      backgroundColor = colooors["neutrals-01"][0];
+  }
+  const styles = (): CSSObject => 
+  {
+    return {
+      backgroundColor,
+      borderRadius: theme.radius["radius-12"],
+      borderTop: `8px solid ${borderColor}`,
+      padding: spaciiing["spacing-24"],
+    };
+  };
   return styles;
 };
 

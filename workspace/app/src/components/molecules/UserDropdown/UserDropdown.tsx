@@ -1,4 +1,5 @@
 import { BodyText } from "@/components/atoms/BodyText/BodyText";
+import { Heart } from "@/components/Icons/Heart";
 import ProfilePicture from "@/components/molecules/profilePicture/ProfilePicture";
 import HeaderDefaultRecreateSearch from "@/components/organisms/Header/DefaultHeader/HeaderDefaultRecreateSearch";
 import { useSignout } from "@/hooks/useSignout";
@@ -89,6 +90,13 @@ export const UserDropdown: FunctionComponent = () =>
           href={appPaths.profile}
           icon={<IconUser size="1rem" stroke={1.5}/>}>
           Profil
+        </Menu.Item>
+        <Menu.Item
+          sx={{ fontSize: 15 }}
+          component={Link}
+          href={appPaths.profile + "?tab=referral"}
+          icon={<Heart size={16}/>}>
+          Freunde werben
         </Menu.Item>
         <Menu.Item
           sx={{ fontSize: 15 }}

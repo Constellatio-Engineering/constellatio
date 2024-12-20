@@ -305,9 +305,12 @@ const AnswerListItem: FunctionComponent<Props> = ({
           <div css={styles.contentColumn}>
             <div css={styles.authorAndDateWrapper}>
               <ForumItemAuthor
-                username={answer.author.username}
-                userId={answer.author.id}
+                externalAuthorityDisplayName={answer.author.externalAuthorityDisplayName}
+                externalAuthorityUrl={answer.author.externalAuthorityUrl}
                 profilePicture={authorProfilePictureUrl}
+                roles={answer.author.roles}
+                userId={answer.author.id}
+                username={answer.author.username}
               />
               <p css={styles.date}>
                 {answer.createdAt.toLocaleDateString("de", {

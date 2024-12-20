@@ -101,6 +101,8 @@ export const users = pgTable("User", {
   semester: smallint("Semester"),
   stripeCustomerId: text("StripeCustomerId"),
   university: text("University"),
+  externalAuthorityUrl: text("ExternalAuthorityUrl"),
+  externalAuthorityDisplayName: text("ExternalAuthorityDisplayName"),
   onboardingResult: onboardingResultEnum("OnboardingResult"),
   subscriptionStatus: subscriptionStatusEnum("SubscriptionStatus"),
   subscriptionId: text("SubscriptionId"),
