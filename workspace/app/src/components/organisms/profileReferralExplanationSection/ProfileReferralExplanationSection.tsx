@@ -1,31 +1,10 @@
-import { BodyText } from "@/components/atoms/BodyText/BodyText";
-import { Button } from "@/components/atoms/Button/Button";
-import CopyToClipboard from "@/components/molecules/copyToClipboard/CopyToClipboard";
-import { api } from "@/utils/api";
-
-import { env } from "@constellatio/env";
-import { Loader, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import { type FunctionComponent } from "react";
 
 import * as styles from "./ProfileReferralExplanationSection.styles";
 
 const ProfileReferralCodeSection: FunctionComponent = () =>
 {
-  const apiContext = api.useUtils();
-  const { data: ownCode, isLoading: isLoadingOwnCode } = api.referral.getOwnReferralCode.useQuery(undefined, {
-    refetchOnMount: false,
-    staleTime: Infinity
-  });
-
-  const { isPending: isCreateReferralCodeLoading, mutate: createReferralCode } = api.referral.createReferralCode.useMutation({
-    onError: (error) => console.log("error while creating referral code", error),
-    onSuccess: async (_data, variables) =>
-    {
-      console.log("success", variables);
-      await apiContext.referral.getOwnReferralCode.invalidate();
-    }
-  });
-
   return (
     <div css={styles.wrapper}>
       <Title order={3}>
