@@ -1,4 +1,5 @@
 import ContentWrapper from "@/components/helpers/contentWrapper/ContentWrapper";
+import DashboardCallToActionBlock from "@/components/organisms/dashboardCallToActionBlock/DashboardCallToActionBlock";
 import DashboardCasesBlock from "@/components/organisms/dashboardCasesBlock/DashboardCasesBlock";
 import DashboardHeader from "@/components/organisms/dashboardHeader/DashboardHeader";
 import DashboardLastEditedBlock from "@/components/organisms/dashboardLastEditedBlock/DashboardLastEditedBlock";
@@ -14,6 +15,7 @@ const DashboardPage: FunctionComponent<GetDashboardPagePropsResult> = ({ allLear
   <div>
     <DashboardHeader/>
     <ContentWrapper stylesOverrides={styles.sections}>
+      <DashboardCallToActionBlock/>
       {allLearningPaths?.map(learningPath => (
         <DashboardLearningPathBlock key={learningPath.id} {...learningPath}/>
       ))}
